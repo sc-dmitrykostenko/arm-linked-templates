@@ -1,66 +1,55 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
     "parameters": {
-        "serverName": {
-            "value": "dk-example"
+        "infrastructure.parameters": {
+            "type": "string",
+            "defaultValue": "0infrastructure-parameters.json"
         },
-        "administratorLogin": {
-            "value": "dk"
-        },
-        "administratorLoginPassword": {
-            "value": "Password12345"
-        },
-        "databaseUsername": {
-            "value": "dk"
-        },
-        "databasePassword": {
-            "value": null
-        },
-        "databaseName": {
-            "value": "dk-example"
-        },
-        "edition": {
-            "value": "Standard"
-        },
-        "collation": {
-            "value": "SQL_Latin1_General_CP1_CI_AS"
-        },
-        "maxSizeBytes": {
-            "value": "268435456000"
-        },
-        "requestedServiceObjectiveId": {
-            "value": "f1173c43-91bd-4aaa-973c-54e79e15235b"
-        },
-        "serverLocation": {
-            "value": "northeurope"
-        },
-        "name": {
-            "value": "dk-example"
-        },
-        "hostingPlanName": {
-            "value": "dk-example"
-        },
-        "hostingEnvironment": {
-            "value": ""
-        },
-        "location": {
-            "value": "North Europe"
-        },
-        "sku": {
-            "value": "Basic"
-        },
-        "workerSize": {
-            "value": "0"
-        },
-        "serverFarmResourceGroup": {
-            "value": "dk-example"
-        },
-        "skuCode": {
-            "value": "B1"
-        },
-        "subscriptionId": {
-            "value": "36cd8490-b4d3-4eee-be49-11e94253595a"
+
+        "modules": {
+            "type": "array",
+            "defaultValue": []
         }
-    }
+    },
+    "variables" : {
+        "base" : "[deployment().properties.templateLink.uri]"
+    },
+    "resources": [
+        { 
+            "apiVersion": "2015-01-01", 
+            "name": "infrastructure", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "[uri(variables('base'), '0infrastructure-template.json')]",
+                    "contentVersion": "1.0.0.0"
+                }, 
+                "parametersLink": {
+                    "uri": "[uri(variables('base'), parameters('infrastructure.parameters'))]",
+                    "contentVersion": "1.0.0.0"
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-01-01", 
+            "name": "modules", 
+            "type": "Microsoft.Resources/deployments",
+            "copy" : {
+                "count" : "[length(parameters('modules'))]",
+                "properties": { 
+                    "mode": "incremental", 
+                    "templateLink": {
+                        "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-template.json'))]",
+                        "contentVersion": "1.0.0.0"
+                    }, 
+                    "parametersLink": {
+                        "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-parameters.json'))]",
+                        "contentVersion": "1.0.0.0"
+                    }
+                }
+            } 
+        }
+    ],
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0"
 }
