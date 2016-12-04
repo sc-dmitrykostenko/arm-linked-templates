@@ -48,7 +48,10 @@
                     "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-parameters.json'))]",
                     "contentVersion": "1.0.0.0"
                 }
-            }
+            },
+            "dependsOn": [
+                "infrastructure"
+            ]
         }
     ],
     "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
