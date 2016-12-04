@@ -1,147 +1,90 @@
 {
     "parameters": {
-        "serverName": {
+        "deployment.id" : {
+            "type" : "string"
+        },
+        "deployment.location" : {
+            "type" : "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "sql.name": {
+            "type": "string",
+            "defaultValue" : "[concat(parameters('deployment.id'), '-sql')]"
+        },
+        "sql.login": {
             "type": "string"
         },
-        "administratorLogin": {
-            "type": "string"
-        },
-        "administratorLoginPassword": {
+        "sql.password": {
             "type": "securestring"
         },
-        "databaseUsername": {
-            "type": "string"
+        "sql.location": {
+            "type": "string",
+            "defaultValue" : "[parameters('deployment.location')]"
         },
-        "databasePassword": {
-            "type": "securestring"
+        "hplan.name": {
+            "type": "string",
+            "defaultValue" : "[concat(parameters('deployment.id'), '-hp')]"
         },
-        "databaseName": {
-            "type": "string"
+        "hplan.environment": {
+            "type": "string",
+            "defaultValue" : ""
         },
-        "edition": {
-            "type": "string"
+        "hplan.location": {
+            "type": "string",
+            "defaultValue" : "[parameters('deployment.location')]"
         },
-        "collation": {
-            "type": "string"
+        "hplan.sku": {
+            "type": "string",
+            "defaultValue" : "B1"
         },
-        "maxSizeBytes": {
-            "type": "string"
+        "hplan.capacity": {
+            "type": "string",
+            "defaultValue" : "1"
         },
-        "requestedServiceObjectiveId": {
-            "type": "string"
-        },
-        "serverLocation": {
-            "type": "string"
-        },
-        "name": {
-            "type": "string"
-        },
-        "hostingPlanName": {
-            "type": "string"
-        },
-        "hostingEnvironment": {
-            "type": "string"
-        },
-        "location": {
-            "type": "string"
-        },
-        "sku": {
-            "type": "string"
-        },
-        "skuCode": {
-            "type": "string"
-        },
-        "workerSize": {
-            "type": "string"
-        },
-        "serverFarmResourceGroup": {
-            "type": "string"
-        },
-        "subscriptionId": {
-            "type": "string"
+        "hplan.workerSize": {
+            "type": "string",
+            "defaultValue" : "0"
         }
     },
     "resources": [
         {
-            "name": "[parameters('name')]",
-            "type": "Microsoft.Web/sites",
-            "properties": {
-                "siteConfig": {
-                    "connectionStrings": [
-                        {
-                            "name": "defaultConnection",
-                            "ConnectionString": "[concat('Data Source=tcp:' , reference('Microsoft.SQL/servers/dk-example').fullyQualifiedDomainName , ',1433;Initial Catalog=dk-example;User Id=dk@',reference('Microsoft.SQL/servers/dk-example').fullyQualifiedDomainName,';Password=',parameters('administratorLoginPassword'),';')]",
-                            "type": "SQLAzure"
-                        }
-                    ]
-                },
-                "name": "[parameters('name')]",
-                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
-                "hostingEnvironment": "[parameters('hostingEnvironment')]"
-            },
             "apiVersion": "2016-03-01",
-            "location": "[parameters('location')]",
-            "tags": {
-                "[concat('hidden-related:', '/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "empty"
-            },
-            "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
-            ]
-        },
-        {
-            "apiVersion": "2016-03-01",
-            "name": "[parameters('hostingPlanName')]",
+            "name": "[parameters('hplan.name')]",
             "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('location')]",
+            "location": "[parameters('hplan.location')]",
             "properties": {
-                "name": "[parameters('hostingPlanName')]",
-                "workerSizeId": "[parameters('workerSize')]",
+                "name": "[parameters('hplan.name')]",
                 "reserved": false,
-                "hostingEnvironment": "[parameters('hostingEnvironment')]"
+                "hostingEnvironment": "[parameters('hplan.environment')]"
             },
             "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
+                "Name": "[parameters('hplan.sku')]",
+                "Capacity": "[parameters('hplan.capacity')]"
             }
         },
         {
-            "name": "[parameters('serverName')]",
+            "name": "[parameters('sql.name')]",
             "type": "Microsoft.Sql/servers",
-            "location": "[parameters('serverLocation')]",
+            "location": "[parameters('sql.location')]",
             "apiVersion": "2014-04-01-preview",
             "properties": {
-                "administratorLogin": "[parameters('administratorLogin')]",
-                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "administratorLogin": "[parameters('sql.login')]",
+                "administratorLoginPassword": "[parameters('sql.password')]",
                 "version": "12.0"
             },
             "resources": [
                 {
-                    "name": "[parameters('databaseName')]",
-                    "type": "databases",
-                    "location": "[parameters('serverLocation')]",
-                    "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
-                    ],
-                    "properties": {
-                        "edition": "[parameters('edition')]",
-                        "collation": "[parameters('collation')]",
-                        "maxSizeBytes": "[parameters('maxSizeBytes')]",
-                        "requestedServiceObjectiveId": "[parameters('requestedServiceObjectiveId')]"
-                    }
-                },
-                {
-                    "apiVersion": "2014-04-01-preview",
-                    "dependsOn": [
-                        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
-                    ],
-                    "location": "[parameters('serverLocation')]",
                     "name": "AllowAllWindowsAzureIps",
+                    "type": "firewallrules",
+                    "apiVersion": "2014-04-01-preview",
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sql.name'))]"
+                    ],
+                    "location": "[parameters('sql.location')]",
                     "properties": {
                         "endIpAddress": "0.0.0.0",
                         "startIpAddress": "0.0.0.0"
-                    },
-                    "type": "firewallrules"
+                    }
                 }
             ]
         }
