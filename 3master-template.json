@@ -31,23 +31,24 @@
             }
         },
         {
-            "apiVersion": "2015-01-01", 
-            "name": "modules", 
-            "type": "Microsoft.Resources/deployments",
             "copy" : {
-                "count" : "[length(parameters('modules'))]",
-                "properties": { 
-                    "mode": "incremental", 
-                    "templateLink": {
-                        "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-template.json'))]",
-                        "contentVersion": "1.0.0.0"
-                    }, 
-                    "parametersLink": {
-                        "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-parameters.json'))]",
-                        "contentVersion": "1.0.0.0"
-                    }
+                "name": "modules", 
+                "count" : "[length(parameters('modules'))]"
+            },
+            "name" : "parameters('modules')[copyIndex()]",
+            "apiVersion": "2015-01-01", 
+            "type": "Microsoft.Resources/deployments",
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-template.json'))]",
+                    "contentVersion": "1.0.0.0"
+                }, 
+                "parametersLink": {
+                    "uri": "[uri(variables('base'), concat(parameters('modules')[copyIndex()], '-parameters.json'))]",
+                    "contentVersion": "1.0.0.0"
                 }
-            } 
+            }
         }
     ],
     "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
