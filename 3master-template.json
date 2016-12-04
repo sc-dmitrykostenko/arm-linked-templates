@@ -35,7 +35,7 @@
                 "name": "modules", 
                 "count" : "[length(parameters('modules'))]"
             },
-            "name" : "parameters('modules')[copyIndex()]",
+            "name" : "[parameters('modules')[copyIndex()]]",
             "apiVersion": "2015-01-01", 
             "type": "Microsoft.Resources/deployments",
             "properties": { 
