@@ -2,17 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "deployment.id": {
-            "value": "dk-example-1"
-        },
-        "sql.login": {
-            "value": "dk"
-        },
-        "sql.password": {
-            "value": "Password12345"
+        "infrastructure.parameters" : {
+            "value": "0infrastructure-parameters.json"
         },
         "modules" : {
-            "value" : [ "1websiteA", "2websiteB" ]
+            "value": [ "1websiteA" ]
         }
     }
 }
