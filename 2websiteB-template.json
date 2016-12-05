@@ -44,7 +44,7 @@
                     "connectionStrings": [
                         {
                             "name": "defaultConnection",
-                            "ConnectionString": "[concat('Data Source=tcp:', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.SQL/servers', parameters('sql.name')), '2014-04-01-preview').fullyQualifiedDomainName, ',1433;User Id=', parameters('sql.login'), '@', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.SQL/servers', parameters('sql.name')), '2014-04-01-preview').fullyQualifiedDomainName, ';Password=', parameters('sql.password'),';')]",
+                            "ConnectionString": "[concat('Data Source=tcp:', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Sql/servers', parameters('sql.name')), '2014-04-01-preview').fullyQualifiedDomainName, ',1433;User Id=', parameters('sql.login'), '@', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Sql/servers', parameters('sql.name')), '2014-04-01-preview').fullyQualifiedDomainName, ';Password=', parameters('sql.password'),';')]",
                             "type": "SQLAzure"
                         }
                     ]
