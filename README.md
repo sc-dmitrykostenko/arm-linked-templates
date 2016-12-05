@@ -18,3 +18,13 @@ to the same resources across templates.
 
 Website templates reuse hosting plan and SQL server via reference.
 
+In order to use:
+  * Clone to your repo
+  * Replace dk-example-4 in parameter files with your deployment ID
+  * Choose modules in 3master-parameters.json
+  * Run ARM deployment and supply RAW github URL to 3master-template.json:
+
+   > New-AzureRmResourceGroupDeployment -ResourceGroupName "dk-example-4" -TemplateUri https://raw.githubusercontent.com/
+sc-dmitrykostenko/arm-linked-templates/master/3master-template.json -TemplateParameterFile .\3master-parameters.json
+
+
