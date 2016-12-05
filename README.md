@@ -24,7 +24,7 @@ In order to use:
   * Choose modules in 3master-parameters.json
   * Run ARM deployment and supply RAW github URL to 3master-template.json:
 
-   > New-AzureRmResourceGroupDeployment -ResourceGroupName "dk-example-4" -TemplateUri https://raw.githubusercontent.com/
-sc-dmitrykostenko/arm-linked-templates/master/3master-template.json -TemplateParameterFile .\3master-parameters.json
+   > New-AzureRmResourceGroupDeployment -ResourceGroupName "dk-example-4" -TemplateUri 
+   > https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/3master-template.json -TemplateParameterFile .\3master-parameters.json
 
 
