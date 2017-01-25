@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "deployment.id": {
-            "value": "dk-example-4"
+            "value": "dk-test-3"
         },
         "sql.login": {
             "value": "dk"

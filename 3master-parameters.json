@@ -6,7 +6,7 @@
             "value": "0infrastructure-parameters.json"
         },
         "modules" : {
-            "value": [ "1websiteA", "2websiteB" ]
+            "value": [ ]
         }
     }
 }
