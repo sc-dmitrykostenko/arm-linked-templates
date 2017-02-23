@@ -1,0 +1,123 @@
+{
+    "parameters": {
+        "standard" : {
+            "type" : "secureobject",
+            "defaultValue" : {}
+        },
+        "extension" : {
+            "type" : "secureobject",
+            "defaultValue": {}
+        },
+
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').deploymentId]"
+        },
+        "deploymentLocation": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').deploymentLocation]"
+        },
+        "siteName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-apps-a')]"
+        },
+        "siteLocation": {
+            "type": "string",
+            "defaultValue": "[parameters('deploymentLocation')]"
+        },
+        "sqlName": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').sqlName]"
+        },
+        "sqlLogin": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').sqlLogin]"
+        },
+        "sqlPassword": {
+            "type": "securestring",
+            "defaultValue": "[parameters('standard').sqlPassword]"
+        },
+        "sqlLocation" : {
+            "type" : "string",
+            "defaultValue": "[parameters('standard').sqlLocation]"
+        },
+        "dbName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-db-a')]"
+        },
+        "dbEdition": {
+            "type": "string",
+            "defaultValue": "Standard"
+        },
+        "dbCollation": {
+            "type": "string",
+            "defaultValue": "SQL_Latin1_General_CP1_CI_AS"
+        },
+        "dbMaxSizeBytes": {
+            "type": "string",
+            "defaultValue": "268435456000"
+        },
+        "dbTierId": {
+            "type": "string",
+            "defaultValue": "f1173c43-91bd-4aaa-973c-54e79e15235b"
+        },
+        "hplanName": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').hplanName]"
+        }
+    },
+    "variables" : {
+        "hplan.reference": {
+            "value": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hplanName'))]"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('siteName')]",
+            "type": "Microsoft.Web/sites",
+            "properties": {
+                "siteConfig": {
+                    "connectionStrings": [
+                        {
+                            "name": "defaultConnection",
+                            "ConnectionString": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.SQL/servers', parameters('sqlName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('dbName'), ';User Id=', parameters('sqlLogin'), '@', reference(resourceId('Microsoft.SQL/servers', parameters('sqlName'))).fullyQualifiedDomainName, ';Password=', parameters('sqlPassword'),';')]",
+                            "type": "SQLAzure"
+                        }
+                    ]
+                },
+                "name": "[parameters('siteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hplanName'))]"
+            },
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('siteLocation')]",
+            "tags": {
+                "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hplanName')))]": "empty"
+            }
+        },
+        {
+            "name": "[parameters('sqlName')]",
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2014-04-01-preview",
+            "location": "[parameters('sqlLocation')]",
+            "resources": [
+                {
+                    "name": "[parameters('dbName')]",
+                    "type": "databases",
+                    "apiVersion": "2014-04-01-preview",
+                    "location" : "[parameters('sqlLocation')]",
+                    "properties": {
+                        "edition": "[parameters('dbEdition')]",
+                        "collation": "[parameters('dbCollation')]",
+                        "maxSizeBytes": "[parameters('dbMaxSizeBytes')]",
+                        "requestedServiceObjectiveId": "[parameters('dbTierId')]"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.Sql/servers/', parameters('sqlName'))]"
+                    ]
+                }
+            ]
+        }
+    ],
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0"
+}

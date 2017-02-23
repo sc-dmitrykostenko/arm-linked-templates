@@ -1,47 +1,47 @@
 {
     "parameters": {
-        "deployment.id" : {
+        "deploymentId" : {
             "type" : "string"
         },
-        "deployment.location" : {
+        "deploymentLocation" : {
             "type" : "string",
             "defaultValue": "[resourceGroup().location]"
         },
-        "sql.name": {
+        "sqlName": {
             "type": "string",
-            "defaultValue" : "[concat(parameters('deployment.id'), '-sql')]"
+            "defaultValue" : "[concat(parameters('deploymentId'), '-sql')]"
         },
-        "sql.login": {
+        "sqlLogin": {
             "type": "string"
         },
-        "sql.password": {
+        "sqlPassword": {
             "type": "securestring"
         },
-        "sql.location": {
+        "sqlLocation": {
             "type": "string",
-            "defaultValue" : "[parameters('deployment.location')]"
+            "defaultValue" : "[parameters('deploymentLocation')]"
         },
-        "hplan.name": {
+        "hplanName": {
             "type": "string",
-            "defaultValue" : "[concat(parameters('deployment.id'), '-hp')]"
+            "defaultValue" : "[concat(parameters('deploymentId'), '-hp')]"
         },
-        "hplan.environment": {
+        "hplanEnvironment": {
             "type": "string",
             "defaultValue" : ""
         },
-        "hplan.location": {
+        "hplanLocation": {
             "type": "string",
-            "defaultValue" : "[parameters('deployment.location')]"
+            "defaultValue" : "[parameters('deploymentLocation')]"
         },
-        "hplan.sku": {
+        "hplanSku": {
             "type": "string",
             "defaultValue" : "B1"
         },
-        "hplan.capacity": {
+        "hplanCapacity": {
             "type": "string",
             "defaultValue" : "1"
         },
-        "hplan.workerSize": {
+        "hplanWorkerSize": {
             "type": "string",
             "defaultValue" : "0"
         }
@@ -49,27 +49,27 @@
     "resources": [
         {
             "apiVersion": "2016-03-01",
-            "name": "[parameters('hplan.name')]",
+            "name": "[parameters('hplanName')]",
             "type": "Microsoft.Web/serverfarms",
-            "location": "[parameters('hplan.location')]",
+            "location": "[parameters('hplanLocation')]",
             "properties": {
-                "name": "[parameters('hplan.name')]",
+                "name": "[parameters('hplanName')]",
                 "reserved": false,
-                "hostingEnvironment": "[parameters('hplan.environment')]"
+                "hostingEnvironment": "[parameters('hplanEnvironment')]"
             },
             "sku": {
-                "Name": "[parameters('hplan.sku')]",
-                "Capacity": "[parameters('hplan.capacity')]"
+                "Name": "[parameters('hplanSku')]",
+                "Capacity": "[parameters('hplanCapacity')]"
             }
         },
         {
-            "name": "[parameters('sql.name')]",
+            "name": "[parameters('sqlName')]",
             "type": "Microsoft.Sql/servers",
-            "location": "[parameters('sql.location')]",
+            "location": "[parameters('sqlLocation')]",
             "apiVersion": "2014-04-01-preview",
             "properties": {
-                "administratorLogin": "[parameters('sql.login')]",
-                "administratorLoginPassword": "[parameters('sql.password')]",
+                "administratorLogin": "[parameters('sqlLogin')]",
+                "administratorLoginPassword": "[parameters('sqlPassword')]",
                 "version": "12.0"
             },
             "resources": [
@@ -78,9 +78,9 @@
                     "type": "firewallrules",
                     "apiVersion": "2014-04-01-preview",
                     "dependsOn": [
-                        "[concat('Microsoft.Sql/servers/', parameters('sql.name'))]"
+                        "[concat('Microsoft.Sql/servers/', parameters('sqlName'))]"
                     ],
-                    "location": "[parameters('sql.location')]",
+                    "location": "[parameters('sqlLocation')]",
                     "properties": {
                         "endIpAddress": "0.0.0.0",
                         "startIpAddress": "0.0.0.0"

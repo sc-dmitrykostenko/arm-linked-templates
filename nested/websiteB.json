@@ -1,0 +1,76 @@
+{
+    "parameters": {
+        "standard" : {
+            "type" : "secureobject",
+            "defaultValue" : {}
+        },
+        "extension" : {
+            "type" : "secureobject",
+            "defaultValue": {}
+        },
+
+        "deploymentId": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').deploymentId]"
+        },
+        "deploymentLocation": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').deploymentLocation]"
+        },
+        "siteName": {
+            "type": "string",
+            "defaultValue": "[concat(parameters('deploymentId'), '-apps-b')]"
+        },
+        "siteLocation": {
+            "type": "string",
+            "defaultValue": "[parameters('deploymentLocation')]"
+        },
+        "sqlName": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').sqlName]"
+        },
+        "sqlLogin": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').sqlLogin]"
+        },
+        "sqlPassword": {
+            "type": "securestring",
+            "defaultValue": "[parameters('standard').sqlPassword]"
+        },
+        "hplanName": {
+            "type": "string",
+            "defaultValue": "[parameters('standard').hplanName]"
+        }
+    },
+    "variables" : {
+        "hplan.reference": {
+            "value": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hplanName'))]"
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('siteName')]",
+            "type": "Microsoft.Web/sites",
+            "properties": {
+                "siteConfig": {
+                    "connectionStrings": [
+                        {
+                            "name": "defaultConnection",
+                            "ConnectionString": "[concat('Data Source=tcp:', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Sql/servers', parameters('sqlName')), '2014-04-01-preview').fullyQualifiedDomainName, ',1433;User Id=', parameters('sqlLogin'), '@', reference(resourceId(subscription().subscriptionId, resourceGroup().name, 'Microsoft.Sql/servers', parameters('sqlName')), '2014-04-01-preview').fullyQualifiedDomainName, ';Password=', parameters('sqlPassword'),';')]",
+                            "type": "SQLAzure"
+                        }
+                    ]
+                },
+                "name": "[parameters('siteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hplanName'))]"
+            },
+            "apiVersion": "2016-03-01",
+            "location": "[parameters('siteLocation')]",
+            "tags": {
+                "[concat('hidden-related:', resourceId('Microsoft.Web/serverfarms', parameters('hplanName')))]": "empty"
+            }
+        }
+    ],
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0"
+}

@@ -1,0 +1,120 @@
+{
+    "parameters": {
+        "deploymentId" : {
+            "type" : "string"
+        },
+        "deploymentLocation" : {
+            "type" : "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "sqlName": {
+            "type": "string",
+            "defaultValue" : "[concat(parameters('deploymentId'), '-sql')]"
+        },
+        "sqlLogin": {
+            "type": "string"
+        },
+        "sqlPassword": {
+            "type": "securestring"
+        },
+        "sqlLocation": {
+            "type": "string",
+            "defaultValue" : "[parameters('deploymentLocation')]"
+        },
+        "hplanName": {
+            "type": "string",
+            "defaultValue" : "[concat(parameters('deploymentId'), '-hp')]"
+        },
+        "hplanEnvironment": {
+            "type": "string",
+            "defaultValue" : ""
+        },
+        "hplanLocation": {
+            "type": "string",
+            "defaultValue" : "[parameters('deploymentLocation')]"
+        },
+        "hplanSku": {
+            "type": "string",
+            "defaultValue" : "B1"
+        },
+        "hplanCapacity": {
+            "type": "string",
+            "defaultValue" : "1"
+        },
+        "hplanWorkerSize": {
+            "type": "string",
+            "defaultValue" : "0"
+        },
+        "nestedTemplatesUri" : {
+            "type" : "string",
+            "defaultValue" : "uri([deployment().properties.templateLink.uri], 'nested')"
+        },
+        "modules": {
+            "type": "array",
+            "defaultValue": [
+                {
+                    "name" : "empty",
+                    "templateUri" : "[parameters('nestedTemplateUri')]",
+                    "parameters" : {}
+                }
+            ]
+        }
+    },
+    "variables" : {
+        "base" : "[deployment().properties.templateLink.uri]",
+        "infrastructureParameters" : {
+            "deploymentId" : "[parameters('deploymentId')]",
+            "deploymentLocation" : "[parameters('deploymentLocation')]",
+            "sqlName": "[parameters('sqlName')]",
+            "sqlLogin": "[parameters('sqlLogin')]",
+            "sqlPassword": "[parameters('sqlPassword')]",
+            "sqlLocation": "[parameters('sqlLocation')]",
+            "hplanName": "[parameters('hplanName')]",
+            "hplanEnvironment": "[parameters('hplanEnvironment')]",
+            "hplanLocation": "[parameters('hplanLocation')]",
+            "hplanSku": "[parameters('hplanSku')]",
+            "hplanCapacity": "[parameters('hplanCapacity')]",
+            "hplanWorkerSize": "[parameters('hplanWorkerSize')]"
+        }
+    },
+    "resources": [
+        { 
+            "apiVersion": "2015-01-01", 
+            "name": "infrastructure", 
+            "type": "Microsoft.Resources/deployments", 
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "[uri(parameters('nestedTemplatesUri'), 'infrastructure.json')]",
+                    "contentVersion": "1.0.0.0"
+                }, 
+                "parameters": "[variables('infrastructureParameters')]"
+            }
+        },
+        {
+            "copy" : {
+                "name": "modules", 
+                "count" : "[length(parameters('modules'))]"
+            },
+            "name" : "[parameters('modules')[copyIndex()].name]",
+            "apiVersion": "2015-01-01", 
+            "type": "Microsoft.Resources/deployments",
+            "properties": { 
+                "mode": "incremental", 
+                "templateLink": {
+                    "uri": "[parameters('modules')[copyIndex()].templateUri]",
+                    "contentVersion": "1.0.0.0"
+                }, 
+                "parameters": {
+                    "standard": "[variables('infrastructureParameters')]",
+                    "extension" : "[parameters('modules')[copyIndex()].parameters]"
+                }
+            },
+            "dependsOn": [
+                "infrastructure"
+            ]
+        }
+    ],
+    "$schema": "http://schema.management.azure.com/schemas/2014-04-01-preview/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0"
+}
