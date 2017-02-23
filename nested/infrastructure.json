@@ -1,7 +1,8 @@
 {
     "parameters": {
         "deploymentId" : {
-            "type" : "string"
+            "type" : "string",
+            "defaultValue": "[resourceGroup().name]"
         },
         "deploymentLocation" : {
             "type" : "string",
