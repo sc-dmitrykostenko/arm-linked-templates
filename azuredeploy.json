@@ -60,23 +60,6 @@
             ]
         }
     },
-    "variables" : {
-        "base" : "[deployment().properties.templateLink.uri]",
-        "infrastructureParameters" : {
-            "deploymentId" : "[parameters('deploymentId')]",
-            "deploymentLocation" : "[parameters('deploymentLocation')]",
-            "sqlName": "[parameters('sqlName')]",
-            "sqlLogin": "[parameters('sqlLogin')]",
-            "sqlPassword": "[parameters('sqlPassword')]",
-            "sqlLocation": "[parameters('sqlLocation')]",
-            "hplanName": "[parameters('hplanName')]",
-            "hplanEnvironment": "[parameters('hplanEnvironment')]",
-            "hplanLocation": "[parameters('hplanLocation')]",
-            "hplanSku": "[parameters('hplanSku')]",
-            "hplanCapacity": "[parameters('hplanCapacity')]",
-            "hplanWorkerSize": "[parameters('hplanWorkerSize')]"
-        }
-    },
     "resources": [
         { 
             "apiVersion": "2015-01-01", 
@@ -88,7 +71,20 @@
                     "uri": "[uri(parameters('nestedTemplatesUri'), 'infrastructure.json')]",
                     "contentVersion": "1.0.0.0"
                 }, 
-                "parameters": "[variables('infrastructureParameters')]"
+                "parameters": {
+                    "deploymentId" : { "value" : "[parameters('deploymentId')]" },
+                    "deploymentLocation" : { "value" : "[parameters('deploymentLocation')]" },
+                    "sqlName": { "value" : "[parameters('sqlName')]" },
+                    "sqlLogin": { "value" : "[parameters('sqlLogin')]" },
+                    "sqlPassword": { "value" : "[parameters('sqlPassword')]" },
+                    "sqlLocation": { "value" : "[parameters('sqlLocation')]" },
+                    "hplanName": { "value" : "[parameters('hplanName')]" },
+                    "hplanEnvironment": { "value" : "[parameters('hplanEnvironment')]" },
+                    "hplanLocation": { "value" : "[parameters('hplanLocation')]" },
+                    "hplanSku": { "value" : "[parameters('hplanSku')]" },
+                    "hplanCapacity": { "value" : "[parameters('hplanCapacity')]" },
+                    "hplanWorkerSize": { "value" : "[parameters('hplanWorkerSize')]" }
+                }
             }
         },
         {
@@ -106,8 +102,23 @@
                     "contentVersion": "1.0.0.0"
                 }, 
                 "parameters": {
-                    "standard": "[variables('infrastructureParameters')]",
-                    "extension" : "[parameters('modules')[copyIndex()].parameters]"
+                    "standard": {
+                        "value" : {
+                            "deploymentId" : "[parameters('deploymentId')]",
+                            "deploymentLocation" : "[parameters('deploymentLocation')]",
+                            "sqlName": "[parameters('sqlName')]",
+                            "sqlLogin": "[parameters('sqlLogin')]",
+                            "sqlPassword": "[parameters('sqlPassword')]",
+                            "sqlLocation": "[parameters('sqlLocation')]",
+                            "hplanName": "[parameters('hplanName')]",
+                            "hplanEnvironment": "[parameters('hplanEnvironment')]",
+                            "hplanLocation": "[parameters('hplanLocation')]",
+                            "hplanSku": "[parameters('hplanSku')]",
+                            "hplanCapacity": "[parameters('hplanCapacity')]",
+                            "hplanWorkerSize": "[parameters('hplanWorkerSize')]"
+                        }
+                    },
+                    "extension" : { "value" : "[parameters('modules')[copyIndex()].parameters]" }
                 }
             },
             "dependsOn": [
