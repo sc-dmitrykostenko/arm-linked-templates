@@ -7,7 +7,7 @@
         "extension" : {
             "type" : "secureobject",
             "defaultValue": {
-                "nameSuffix" : "-app-a"
+                "siteNameSuffix" : "-app-a"
             }
         },
 
@@ -21,11 +21,11 @@
         },
         "siteNameSuffix" : {
             "type" : "string",
-            "defaultValue": "[parameters('extension').nameSuffix]"
+            "defaultValue": "[parameters('extension').siteNameSuffix]"
         },
         "siteName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('deploymentId'), parameters('nameSuffix'))]"
+            "defaultValue": "[concat(parameters('deploymentId'), parameters('siteNameSuffix'))]"
         },
         "siteLocation": {
             "type": "string",
