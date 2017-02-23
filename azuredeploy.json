@@ -54,7 +54,7 @@
             "defaultValue": [
                 {
                     "name" : "empty",
-                    "templateUri" : "[parameters('nestedTemplatesUri')]",
+                    "templateUri" : "[uri(parameters('nestedTemplatesUri'), 'empty.json')]",
                     "parameters" : {}
                 }
             ]
