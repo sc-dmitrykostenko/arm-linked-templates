@@ -2,13 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "deployment.id": {
+        "deploymentId": {
             "value": "dk-test-3"
         },
-        "sql.login": {
+        "sqlLogin": {
             "value": "dk"
         },
-        "sql.password": {
+        "sqlPassword": {
             "value": "Password12345"
         }
     }
