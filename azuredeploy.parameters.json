@@ -2,14 +2,28 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "deploymentId": {
-            "value": "dk-test-3"
-        },
         "sqlLogin": {
             "value": "dk"
         },
         "sqlPassword": {
             "value": "Password12345"
-        }
+        },
+        "modules" : [
+            {
+                "name" : "websiteA",
+                "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json",
+                "parameters" : {
+                    "nameSuffix" : "-app-a-override"
+                }
+            },
+            {
+                "name" : "websiteB",
+                "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteB.json",
+                "parameters" : {
+                    
+                }
+            }
+
+        ]
     }
 }

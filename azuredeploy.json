@@ -1,7 +1,8 @@
 {
     "parameters": {
         "deploymentId" : {
-            "type" : "string"
+            "type" : "string",
+            "defaultValue": "[resourceGroup().name]"
         },
         "deploymentLocation" : {
             "type" : "string",
@@ -98,7 +99,7 @@
             "properties": { 
                 "mode": "incremental", 
                 "templateLink": {
-                    "uri": "[parameters('modules')[copyIndex()].templateUri]",
+                    "uri": "[replace(parameters('modules')[copyIndex()].templateUri, '$nested', parameters('nestedTemplatesUri'))]",
                     "contentVersion": "1.0.0.0"
                 }, 
                 "parameters": {

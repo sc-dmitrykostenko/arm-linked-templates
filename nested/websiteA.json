@@ -6,7 +6,9 @@
         },
         "extension" : {
             "type" : "secureobject",
-            "defaultValue": {}
+            "defaultValue": {
+                "nameSuffix" : "-app-a"
+            }
         },
 
         "deploymentId": {
@@ -17,9 +19,13 @@
             "type": "string",
             "defaultValue": "[parameters('standard').deploymentLocation]"
         },
+        "siteNameSuffix" : {
+            "type" : "string",
+            "defaultValue": "[parameters('extension').nameSuffix]"
+        },
         "siteName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('deploymentId'), '-apps-a')]"
+            "defaultValue": "[concat(parameters('deploymentId'), parameters('nameSuffix')]"
         },
         "siteLocation": {
             "type": "string",
