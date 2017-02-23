@@ -25,7 +25,7 @@
         },
         "siteName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('deploymentId'), parameters('nameSuffix')]"
+            "defaultValue": "[concat(parameters('deploymentId'), parameters('nameSuffix'))]"
         },
         "siteLocation": {
             "type": "string",
