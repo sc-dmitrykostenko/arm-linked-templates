@@ -51,7 +51,7 @@
             "defaultValue" : "[uri(deployment().properties.templateLink.uri, 'nested/')]"
         },
         "modules": {
-            "type": "securearray",
+            "type": "secureobject",
             "defaultValue": [
                 {
                     "name" : "empty",
