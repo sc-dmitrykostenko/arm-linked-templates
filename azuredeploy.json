@@ -47,14 +47,14 @@
         },
         "nestedTemplatesUri" : {
             "type" : "string",
-            "defaultValue" : "[uri(deployment().properties.templateLink.uri, 'nested')]"
+            "defaultValue" : "[uri(deployment().properties.templateLink.uri, 'nested/')]"
         },
         "modules": {
             "type": "array",
             "defaultValue": [
                 {
                     "name" : "empty",
-                    "templateUri" : "[uri(parameters('nestedTemplatesUri'), 'empty.json')]",
+                    "templateUri" : "[concat(parameters('nestedTemplatesUri'), 'empty.json')]",
                     "parameters" : {}
                 }
             ]
@@ -68,7 +68,7 @@
             "properties": { 
                 "mode": "incremental", 
                 "templateLink": {
-                    "uri": "[uri(parameters('nestedTemplatesUri'), 'infrastructure.json')]",
+                    "uri": "[concat(parameters('nestedTemplatesUri'), 'infrastructure.json')]",
                     "contentVersion": "1.0.0.0"
                 }, 
                 "parameters": {
