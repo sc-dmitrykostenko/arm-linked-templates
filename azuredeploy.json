@@ -52,13 +52,15 @@
         },
         "modules": {
             "type": "secureobject",
-            "defaultValue": [
-                {
-                    "name" : "empty",
-                    "templateUri" : "[concat(parameters('nestedTemplatesUri'), 'empty.json')]",
-                    "parameters" : {}
-                }
-            ]
+            "defaultValue": {
+                "items" : [
+                    {
+                        "name" : "empty",
+                        "templateUri" : "[concat(parameters('nestedTemplatesUri'), 'empty.json')]",
+                        "parameters" : {}
+                    }
+                ]
+            }
         }
     },
     "resources": [
@@ -91,15 +93,15 @@
         {
             "copy" : {
                 "name": "modules", 
-                "count" : "[length(parameters('modules'))]"
+                "count" : "[length(parameters('modules').items)]"
             },
-            "name" : "[parameters('modules')[copyIndex()].name]",
+            "name" : "[parameters('modules').items[copyIndex()].name]",
             "apiVersion": "2015-01-01", 
             "type": "Microsoft.Resources/deployments",
             "properties": { 
                 "mode": "incremental", 
                 "templateLink": {
-                    "uri": "[replace(parameters('modules')[copyIndex()].templateUri, '$nested', parameters('nestedTemplatesUri'))]",
+                    "uri": "[replace(parameters('modules').items[copyIndex()].templateUri, '$nested', parameters('nestedTemplatesUri'))]",
                     "contentVersion": "1.0.0.0"
                 }, 
                 "parameters": {
@@ -119,7 +121,7 @@
                             "hplanWorkerSize": "[parameters('hplanWorkerSize')]"
                         }
                     },
-                    "extension" : { "value" : "[parameters('modules')[copyIndex()].parameters]" }
+                    "extension" : { "value" : "[parameters('modules').items[copyIndex()].parameters]" }
                 }
             },
             "dependsOn": [

@@ -9,22 +9,24 @@
             "value": "Password12345"
         },
         "modules" : {
-            "value" : [
-                {
-                    "name" : "websiteA",
-                    "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json",
-                    "parameters" : {
-                        "nameSuffix" : "-app-a-override"
+            "value" : {
+                "items" : [
+                    {
+                        "name" : "websiteA",
+                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json",
+                        "parameters" : {
+                            "nameSuffix" : "-app-a-override"
+                        }
+                    },
+                    {
+                        "name" : "websiteB",
+                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteB.json",
+                        "parameters" : {
+                            
+                        }
                     }
-                },
-                {
-                    "name" : "websiteB",
-                    "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteB.json",
-                    "parameters" : {
-                        
-                    }
-                }
-            ]
+                ]
+            }
         }
     }
 }
