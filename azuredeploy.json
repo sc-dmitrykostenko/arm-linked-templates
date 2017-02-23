@@ -47,7 +47,7 @@
         },
         "nestedTemplatesUri" : {
             "type" : "string",
-            "defaultValue" : "uri([deployment().properties.templateLink.uri], 'nested')"
+            "defaultValue" : "[uri(deployment().properties.templateLink.uri, 'nested')]"
         },
         "modules": {
             "type": "array",
