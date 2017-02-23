@@ -13,14 +13,14 @@
                 "items" : [
                     {
                         "name" : "websiteA",
-                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json",
+                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json?3",
                         "parameters" : {
-                            "nameSuffix" : "-app-a-override"
+                            "siteNameSuffix" : "-app-a-override"
                         }
                     },
                     {
                         "name" : "websiteB",
-                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteB.json",
+                        "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteB.json?3",
                         "parameters" : {
                             
                         }

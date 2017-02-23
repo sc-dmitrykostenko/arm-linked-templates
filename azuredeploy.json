@@ -118,7 +118,8 @@
                             "hplanLocation": "[parameters('hplanLocation')]",
                             "hplanSku": "[parameters('hplanSku')]",
                             "hplanCapacity": "[parameters('hplanCapacity')]",
-                            "hplanWorkerSize": "[parameters('hplanWorkerSize')]"
+                            "hplanWorkerSize": "[parameters('hplanWorkerSize')]",
+                            "outputs" : "[reference('infrastructure').outputs]"
                         }
                     },
                     "extension" : { "value" : "[parameters('modules').items[copyIndex()].parameters]" }

@@ -43,6 +43,10 @@
             "type": "securestring",
             "defaultValue": "[parameters('standard').sqlPassword]"
         },
+        "sqlFQDN" : {
+            "type" : "string",
+            "defaultValue": "[parameters('standard').outputs.sqlFQDN.value]"
+        },
         "sqlLocation" : {
             "type" : "string",
             "defaultValue": "[parameters('standard').sqlLocation]"
@@ -86,7 +90,7 @@
                     "connectionStrings": [
                         {
                             "name": "defaultConnection",
-                            "ConnectionString": "[concat('Data Source=tcp:', reference(resourceId('Microsoft.SQL/servers', parameters('sqlName'))).fullyQualifiedDomainName, ',1433;Initial Catalog=', parameters('dbName'), ';User Id=', parameters('sqlLogin'), '@', reference(resourceId('Microsoft.SQL/servers', parameters('sqlName'))).fullyQualifiedDomainName, ';Password=', parameters('sqlPassword'),';')]",
+                            "ConnectionString": "[concat('Data Source=tcp:', parameters('sqlFQDN'), ',1433;Initial Catalog=', parameters('dbName'), ';User Id=', parameters('sqlLogin'), '@', parameters('sqlFQDN'), ';Password=', parameters('sqlPassword'),';')]",
                             "type": "SQLAzure"
                         }
                     ]
