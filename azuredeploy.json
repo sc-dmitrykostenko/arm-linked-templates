@@ -69,7 +69,7 @@
                 "name" : "infrastructure"
             }
         ],
-        "dependencies": "[concat(variables('defaultDependency'), parameters('modules'))]"
+        "dependencies": "[concat(variables('defaultDependency'), parameters('modules').items)]"
     },
     "resources": [
         { 
