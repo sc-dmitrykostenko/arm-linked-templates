@@ -109,7 +109,7 @@
             "properties": { 
                 "mode": "incremental", 
                 "templateLink": {
-                    "uri": "[replace(parameters('modules').items[copyIndex()].templateUri, '$nested', parameters('nestedTemplatesUri'))]",
+                    "uri": "[parameters('modules').items[copyIndex()].templateUri]",
                     "contentVersion": "1.0.0.0"
                 }, 
                 "parameters": {
