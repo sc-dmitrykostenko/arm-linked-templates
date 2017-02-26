@@ -63,6 +63,14 @@
             }
         }
     },
+    "variables": {
+        "defaultDependency" : [
+            {
+                "name" : "infrastructure"
+            }
+        ],
+        "dependencies": "[concat(variables('defaultDependency'), parameters('modules'))]"
+    },
     "resources": [
         { 
             "apiVersion": "2015-01-01", 
@@ -126,7 +134,8 @@
                 }
             },
             "dependsOn": [
-                "infrastructure"
+                "infrastructure",
+                "[variable('dependencies')[copyIndex()].name"
             ]
         }
     ],
