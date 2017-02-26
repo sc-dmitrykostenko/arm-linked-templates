@@ -135,7 +135,7 @@
             },
             "dependsOn": [
                 "infrastructure",
-                "[variable('dependencies')[copyIndex()].name]"
+                "[variables('dependencies')[copyIndex()].name]"
             ]
         }
     ],
