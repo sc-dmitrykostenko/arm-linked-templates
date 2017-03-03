@@ -92,7 +92,7 @@
                         }
                     ]
                 },
-                "name": "[parameters('siteName')]",
+                "name": "[variables('siteName')]",
                 "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hplanName'))]"
             },
             "apiVersion": "2016-03-01",
