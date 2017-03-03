@@ -75,8 +75,8 @@
         }
     },
     "variables" : {
-        "siteName" : "[replace(parameters('extension').siteName, parameters('siteName'))]",
-        "dbName" : "[replace(parameters('extension').dbName, parameters('dbName'))]"
+        "siteName" : "[replace(parameters('extension').siteName, '$default', parameters('siteName'))]",
+        "dbName" : "[replace(parameters('extension').dbName, '$default', parameters('dbName'))]"
     },
     "resources": [
         {
