@@ -15,7 +15,8 @@
                         "name" : "websiteA",
                         "templateUri" : "https://raw.githubusercontent.com/sc-dmitrykostenko/arm-linked-templates/master/nested/websiteA.json?3",
                         "parameters" : {
-                            "siteNameSuffix" : "-app-a-override"
+                            "siteName" : "dk-test-override-1",
+                            "dbName" : "$default"
                         }
                     },
                     {

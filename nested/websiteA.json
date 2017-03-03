@@ -2,12 +2,14 @@
     "parameters": {
         "standard" : {
             "type" : "secureobject",
-            "defaultValue" : {}
+            "defaultValue" : {
+            }
         },
         "extension" : {
             "type" : "secureobject",
             "defaultValue": {
-                "siteNameSuffix" : "-app-a"
+                "siteName" : "$default",
+                "dbName" : "$default"
             }
         },
 
@@ -19,13 +21,9 @@
             "type": "string",
             "defaultValue": "[parameters('standard').deploymentLocation]"
         },
-        "siteNameSuffix" : {
-            "type" : "string",
-            "defaultValue": "[parameters('extension').siteNameSuffix]"
-        },
         "siteName": {
             "type": "string",
-            "defaultValue": "[concat(parameters('deploymentId'), parameters('siteNameSuffix'))]"
+            "defaultValue": "[concat(parameters('deploymentId'), '-app-a')]"
         },
         "siteLocation": {
             "type": "string",
@@ -77,20 +75,19 @@
         }
     },
     "variables" : {
-        "hplan.reference": {
-            "value": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hplanName'))]"
-        }
+        "siteName" : "[replace(parameters('extension').siteName, parameters('siteName'))]",
+        "dbName" : "[replace(parameters('extension').dbName, parameters('dbName'))]"
     },
     "resources": [
         {
-            "name": "[parameters('siteName')]",
+            "name": "[variables('siteName')]",
             "type": "Microsoft.Web/sites",
             "properties": {
                 "siteConfig": {
                     "connectionStrings": [
                         {
                             "name": "defaultConnection",
-                            "ConnectionString": "[concat('Data Source=tcp:', parameters('sqlFQDN'), ',1433;Initial Catalog=', parameters('dbName'), ';User Id=', parameters('sqlLogin'), '@', parameters('sqlFQDN'), ';Password=', parameters('sqlPassword'),';')]",
+                            "ConnectionString": "[concat('Data Source=tcp:', parameters('sqlFQDN'), ',1433;Initial Catalog=', variables('dbName'), ';User Id=', parameters('sqlLogin'), '@', parameters('sqlFQDN'), ';Password=', parameters('sqlPassword'),';')]",
                             "type": "SQLAzure"
                         }
                     ]
@@ -111,7 +108,7 @@
             "location": "[parameters('sqlLocation')]",
             "resources": [
                 {
-                    "name": "[parameters('dbName')]",
+                    "name": "[variables('dbName')]",
                     "type": "databases",
                     "apiVersion": "2014-04-01-preview",
                     "location" : "[parameters('sqlLocation')]",
